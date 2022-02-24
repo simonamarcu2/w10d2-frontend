@@ -1,6 +1,6 @@
-import './App.css';
-import { fetchRequest } from './utils';
-import { useState } from 'react';
+import { useState, useEffect } from "react";
+import "./App.css";
+import { fetchRequest, tokenFetch } from "./utils";
 
 const App = () => {
   const [user, setUser] = useState();
@@ -8,23 +8,34 @@ const App = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-  const submitHandler = async (e) => {
+
+  useEffect(() => {
+    tokenFetch(setUser)
+  }, [])
+
+  const submitHandler = (e) => {
     e.preventDefault();
-    fetchRequest(setUser, username, email, password);
-  }
+    fetchRequest(setUser, email, password, username);
+  };
 
   return (
-    <div>
-      <h1>{user ? `Welcome ${user} ` : "Please sign up"}</h1>
-
+    <div className="App">
+      <h1>{user ? `Welcome ${user}` : "Please login or sign up"}</h1>
       <form onSubmit={submitHandler}>
-        <input onChange={(e) => setUsername(e.target.value)} />
-        <input onChange={(e) => setEmail(e.target.value)} />
-        <input onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit">Sign up</button>
+        <input
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Username"
+        />
+        <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+        <input
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          type="password"
+        />
+        <button type="submit">Submit</button>
       </form>
     </div>
   );
-}
+};
 
 export default App;
